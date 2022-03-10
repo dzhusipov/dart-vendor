@@ -1,16 +1,20 @@
 import 'photo_size.dart';
 
 class Document {
-  String file_id;
-  PhotoSize thumb;
-  String file_name;
-  String mime_type;
-  int file_size;
+  late String file_id;
+  PhotoSize? thumb;
+  late String file_name;
+  late String mime_type;
+  late int file_size;
 
   Document(
-      {required this.file_id,
-      required this.thumb,
-      required this.file_name,
-      required this.mime_type,
-      required this.file_size});
+      this.file_id, this.thumb, this.file_name, this.mime_type, this.file_size);
+
+  Document.fromJson(Map<String, dynamic> json) {
+    file_id = json['file_id'];
+    thumb = json['thumb'] != null ? PhotoSize.fromJson(json['thumb']) : null;
+    file_name = json['file_name'];
+    mime_type = json['mime_type'];
+    file_size = json['file_size'];
+  }
 }
