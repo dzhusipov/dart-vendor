@@ -1,4 +1,4 @@
-import 'package:dart_vendor/src/model/message.dart';
+import 'message.dart';
 
 class MessageEntity {
   late String file_id;
