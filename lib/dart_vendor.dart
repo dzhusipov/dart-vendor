@@ -7,29 +7,37 @@ void startGettingTelegramMessages() {
   Timer.periodic(time, (Timer t) => getTelegramMessages());
 }
 
+var telegramToken = 'BOT_TOKEN_HERE';
+
 String url = 'https://api.telegram.org/bot$telegramToken';
 
 void getTelegramMessages() {
   Uri uri = Uri.parse('$url/getUpdates');
   var response = http.get(uri);
+
   response.then((response) {
     var jsonResponse = json.decode(response.body);
-    var messages = jsonResponse['result'];
-    for (var message in messages) {
-      var chatId = message['message']['chat']['id'];
-      var text = message['message']['text'];
-      if (text.startsWith('/')) {
-        var command = text.split(' ')[0];
-        var args = text.split(' ').sublist(1);
-        handleCommand(command, args, chatId);
-      } else {
-        handleMessage(text, chatId);
+    print(jsonResponse);
+    if (jsonResponse['ok'] == true) {
+      var messages = jsonResponse['result'];
+      if (messages.length > 0) {
+        for (var message in messages) {
+          var chatId = message['message']['chat']['id'];
+          var text = message['message']['text'];
+          if (text.startsWith('/')) {
+            var command = text.split(' ')[0];
+            var args = text.split(' ').sublist(1);
+            handleCommand(command, args, chatId);
+          } else {
+            handleMessage(text, chatId);
+          }
+        }
       }
     }
   });
 }
 
-handleCommand(command, args, chatId) {
+handleCommand(command, args, int chatId) {
   if (command == '/start') {
     sendMessage('Hello!', chatId);
   } else if (command == '/help') {
@@ -39,7 +47,7 @@ handleCommand(command, args, chatId) {
   }
 }
 
-handleMessage(text, chatId) {
+handleMessage(text, int chatId) {
   Uri uri = Uri.parse('$url/sendMessage');
   var response = http.post(uri, body: {'chat_id': chatId, 'text': text});
   response.then((response) {
@@ -47,9 +55,10 @@ handleMessage(text, chatId) {
   });
 }
 
-sendMessage(text, chatId) {
+sendMessage(text, int chatId) {
   Uri uri = Uri.parse('$url/sendMessage');
-  var response = http.post(uri, body: {'chat_id': chatId, 'text': text});
+  var response =
+      http.post(uri, body: {'chat_id': chatId.toString(), 'text': text});
   response.then((response) {
     print(response.body);
   });
