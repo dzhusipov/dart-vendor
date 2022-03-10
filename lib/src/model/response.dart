@@ -2,16 +2,27 @@ import 'parameters.dart';
 import 'update.dart';
 
 class Response {
-  String ok;
-  int error_code;
-  String description;
-  List<Update> result;
-  Parameters parametes;
+  bool? ok;
+  int? error_code;
+  String? description;
+  List<dynamic>? result;
+  Parameters? parametes;
 
   Response(
-      {required this.ok,
-      required this.error_code,
-      required this.description,
-      required this.result,
-      required this.parametes});
+      this.ok, this.error_code, this.description, this.result, this.parametes);
+
+  Response.fromJson(Map<String, dynamic> json) {
+    ok = json['ok'];
+    error_code = json['error_code'];
+    description = json['description'];
+    result = json['result'];
+    parametes = json['parametes'] != null
+        ? Parameters.fromJson(json['parametes'])
+        : null;
+  }
+
+  @override
+  String toString() {
+    return 'Response{ok: $ok, error_code: $error_code, description: $description, result: $result, parametes: $parametes}';
+  }
 }
