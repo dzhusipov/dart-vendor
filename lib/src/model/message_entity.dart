@@ -1,12 +1,17 @@
-class MessageEntity {
-  String file_id;
-  int width;
-  int height;
-  int file_size;
+import 'package:dart_vendor/src/model/message.dart';
 
-  MessageEntity(
-      {required this.file_id,
-      required this.width,
-      required this.height,
-      required this.file_size});
+class MessageEntity {
+  late String file_id;
+  late int width;
+  late int height;
+  late int file_size;
+
+  MessageEntity(this.file_id, this.width, this.height, this.file_size);
+
+  MessageEntity.fromJson(Map<String, dynamic> json) {
+    file_id = json['file_id'];
+    width = json['width'];
+    height = json['height'];
+    file_size = json['file_size'];
+  }
 }
